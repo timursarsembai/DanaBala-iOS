@@ -24,6 +24,7 @@ struct SubjectView: View {
             ]
         case .reading:
             return [
+                Exercise(title: "Буквы", description: "Изучение русского алфавита", subject: .reading, difficulty: .easy, iconName: "textformat.abc"),
                 Exercise(title: "Алфавит", description: "Изучаем буквы", subject: .reading, difficulty: .easy, iconName: "a.circle.fill"),
                 Exercise(title: "Слоги", description: "Читаем по слогам", subject: .reading, difficulty: .easy, iconName: "textformat.abc"),
                 Exercise(title: "Слова", description: "Простые слова", subject: .reading, difficulty: .medium, iconName: "text.word.spacing"),

@@ -12,11 +12,13 @@ struct Question: Identifiable {
     let text: String
     let correctAnswer: String
     let options: [String]
+    let spokenText: String? // Добавлено для хранения озвучиваемого текста
     
-    init(text: String, correctAnswer: String, wrongAnswers: [String]) {
+    init(text: String, correctAnswer: String, wrongAnswers: [String], spokenText: String? = nil) {
         self.text = text
         self.correctAnswer = correctAnswer
         self.options = ([correctAnswer] + wrongAnswers).shuffled()
+        self.spokenText = spokenText
     }
 }
 
@@ -87,6 +89,45 @@ struct DigitsQuestionGenerator {
             
             questions.append(question)
             lastDigit = selectedDigit
+        }
+        
+        return questions
+    }
+}
+
+// Генератор вопросов для изучения букв
+struct LettersQuestionGenerator {
+    
+    // Русский алфавит
+    static let russianAlphabet = [
+        "А", "Б", "В", "Г", "Д", "Е", "Ё", "Ж", "З", "И", "Й", "К", "Л", "М", "Н", "О", "П",
+        "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я"
+    ]
+    
+    // Функция для создания озвучиваемого вопроса для буквы
+    static func letterToSpokenQuestion(_ letter: String) -> String {
+        return "Найди букву \(letter)"
+    }
+    
+    static func generateQuestions() -> [Question] {
+        var questions: [Question] = []
+        
+        // Перемешиваем алфавит для случайного порядка
+        let shuffledAlphabet = russianAlphabet.shuffled()
+        
+        // Генерируем 33 вопроса (по одному на каждую букву)
+        for letter in shuffledAlphabet {
+            // Генерируем 3 неправильных варианта ответа
+            let wrongLetters = russianAlphabet.filter { $0 != letter }.shuffled().prefix(3)
+            
+            let question = Question(
+                text: "", // Без текста вопроса на экране
+                correctAnswer: letter,
+                wrongAnswers: Array(wrongLetters),
+                spokenText: letterToSpokenQuestion(letter) // Добавляем озвучиваемый текст
+            )
+            
+            questions.append(question)
         }
         
         return questions
